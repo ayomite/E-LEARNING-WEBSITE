@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>School Registration Form</title>
+  <style>
+    /* Basic page setup */
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f4f8;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    /* Registration container */
+    .registration-container {
+      background: #fff;
+      padding: 30px;
+      width: 380px;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: bold;
+      color: #333;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+
+    input:focus {
+      border-color: #007BFF;
+      outline: none;
+    }
+
+    .btn {
+      width: 100%;
+      background: #007BFF;
+      color: white;
+      padding: 10px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .btn:hover {
+      background: #0056b3;
+    }
+
+    .error {
+      color: red;
+      font-size: 13px;
+      margin-top: -10px;
+      margin-bottom: 10px;
+    }
+
+    .success {
+      color: green;
+      text-align: center;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="registration-container">
+    <h2>School Registration</h2>
+    <form id="registrationForm" novalidate>
+      <label>Full Name</label>
+      <input type="text" id="fullName" placeholder="Enter full name">
+
+      <label>Email</label>
+      <input type="email" id="email" placeholder="Enter email">
+
+      <label>Password</label>
+      <input type="password" id="password" placeholder="Enter password">
+
+      <label>Confirm Password</label>
+      <input type="password" id="confirmPassword" placeholder="Confirm password">
+
+      <label>Class</label>
+      <select id="classSelect">
+        <option value="">Select class</option>
+        <option value="JSS1">JSS1</option>
+        <option value="JSS2">JSS2</option>
+        <option value="JSS3">JSS3</option>
+        <option value="SS1">SS1</option>
+        <option value="SS2">SS2</option>
+        <option value="SS3">SS3</option>
+      </select>
+
+      <label>Gender</label>
+      <select id="gender">
+        <option value="">Select gender</option>
+        <option value="Male">Male</option>
+        <option value="Female">Female</option>
+      </select>
+
+      <div class="error" id="errorMessage"></div>
+
+      <button type="submit" class="btn">Register</button>
+      <div class="success" id="successMessage"></div>
+    </form>
+  </div>
+
+  <script>
+    // Get form and input elements
+    const form = document.getElementById('registrationForm');
+    const fullName = document.getElementById('fullName');
+    const email = document.getElementById('email');
+    const password = document.getElementById('password');
+    const confirmPassword = document.getElementById('confirmPassword');
+    const classSelect = document.getElementById('classSelect');
+    const gender = document.getElementById('gender');
+    const errorMessage = document.getElementById('errorMessage');
+    const successMessage = document.getElementById('successMessage');
+
+    // Function to validate email format
+    function validateEmail(email) {
+      // This regex checks for a valid email pattern
+      const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return re.test(String(email).toLowerCase());
+    }
+
+    // Handle form submission
+    form.addEventListener('submit', function(e) {
+      e.preventDefault(); // Prevent page reload
+
+      // Reset messages
+      errorMessage.textContent = '';
+      successMessage.textContent = '';
+
+      // Trim inputs to avoid spaces
+      const nameValue = fullName.value.trim();
+      const emailValue = email.value.trim();
+      const passwordValue = password.value.trim();
+      const confirmPasswordValue = confirmPassword.value.trim();
+      const classValue = classSelect.value.trim();
+      const genderValue = gender.value.trim();
+
+      // Validate fields
+      if (!nameValue || !emailValue || !passwordValue || !confirmPasswordValue || !classValue || !genderValue) {
+        errorMessage.textContent = '⚠️ Please fill in all fields.';
+        return;
+      }
+
+      if (!validateEmail(emailValue)) {
+        errorMessage.textContent = '⚠️ Please enter a valid email address.';
+        return;
+      }
+
+      if (passwordValue.length < 6) {
+        errorMessage.textContent = '⚠️ Password must be at least 6 characters long.';
+        return;
+      }
+
+      if (passwordValue !== confirmPasswordValue) {
+        errorMessage.textContent = '⚠️ Passwords do not match.';
+        return;
+      }
+
+      // If all validations pass
+      successMessage.textContent = '✅ Registration successful!';
+      form.reset(); // Clear the form
+    });
+  </script>
+
+</body>
+</html>

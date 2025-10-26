@@ -114,6 +114,30 @@ body {margin:0;font-family:var(--font);}
             object-fit: cover; /* Makes video cover entire screen */
             z-index: -1; /* Pushes video behind content */
         }
+
+body {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  font-family: Arial, sans-serif;
+  /* Background settings */
+  background-image: url("computerschool.png");
+  background-size: cover;       /* makes image cover entire screen */
+  background-repeat: no-repeat; /* prevent image tiling */
+  background-position: center;  /* center the image */
+}
+
+/* Overlay content styling */
+.content {
+  text-align: center;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.5); /* adds a slight dark overlay for readability */
+  padding: 100px 20px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
         h1 {
             font-family: Arial, sans-serif;
             font-size: 56px;
@@ -162,24 +186,20 @@ body {margin:0;font-family:var(--font);}
 <body>
 <!-- HTML: horizontal navigation bar (school) -->
 <nav class="school-nav" role="navigation" aria-label="Main school navigation">
-  <a href="#" class="nav-logo">E-learn Expert School</a>
+  <a href="#" class="nav-logo">E-Learn Expert School</a>
 
   <ul class="nav-list">
     <li class="nav-item"><a href="#" class="nav-link">Home</a></li>
     <li class="nav-item"><a href="#" class="nav-link">About</a></li>
-    <li class="nav-item"><a href="file:///C:/Users/PC/Documents/registration%20forms/registration.html" class="nav-link">Admissions</a></li>
+    <li class="nav-item"><a href="registration.html" class="nav-link">Admissions</a></li>
     <li class="nav-item"><a href="#" class="nav-link">Courses</a></li>
     <li class="nav-item"><a href="#" class="nav-link">News</a></li>
-    <li class="nav-item"><a href="file:///C:/Users/PC/Documents/signup.html" class="nav-link">Sign up</a></li>
+    <li class="nav-item"><a href="signup.html" class="nav-link">Sign up</a></li>
     <li class="nav-item"><a href="#" class="nav-link">Contact</a></li>
   </ul>
 </nav>
 
     
-    </div>
-<video class="bg-video" autoplay muted loop>
-        <source src="schoolchildren.mp4" type="video/mp4">
-        Your browser does not support HTML5 video.
-    </video>
+    
 </body>
 </html>

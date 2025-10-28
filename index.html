@@ -105,15 +105,7 @@ body {margin:0;font-family:var(--font);}
   .nav-logo{ order:-1; width:100%; text-align:center; }
   .nav-link{ padding:0.5rem 0.7rem; font-size:0.95rem; }
 }
- .bg-video {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover; /* Makes video cover entire screen */
-            z-index: -1; /* Pushes video behind content */
-        }
+ 
 
 body {
   margin: 0;
@@ -198,6 +190,192 @@ body {
     <li class="nav-item"><a href="#" class="nav-link">Contact</a></li>
   </ul>
 </nav>
+<p style="font-size:70px";>this the begining of new code</p>
+:root{
+      --bg: #f6fbff;
+      --card: #ffffff;
+      --muted: #6b7280;
+      --accent: #0b4f6c;
+      --accent-2: #06647a;
+      --glass: rgba(11,79,108,0.06);
+      --radius: 12px;
+      font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:#0f172a;line-height:1.5}
+    .container{max-width:1100px;margin:0 auto;padding:32px}
+
+    header{display:flex;align-items:center;justify-content:space-between;padding:14px 0}
+    .brand{display:flex;align-items:center;gap:12px}
+    .logo{width:48px;height:48px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent-2));display:flex;align-items:center;justify-content:center;color:white;font-weight:700}
+    nav a{color:var(--muted);text-decoration:none;margin-left:18px;font-weight:600}
+
+    .hero{display:grid;grid-template-columns:1fr 420px;gap:28px;align-items:center;padding:36px 0}
+    .hero h1{font-size:clamp(1.6rem,2.6vw,2.4rem);margin:0 0 12px}
+    .hero p{margin:0 0 18px;color:var(--muted)}
+    .cta{display:flex;gap:12px}
+    .btn{background:var(--accent);color:white;padding:12px 18px;border-radius:10px;border:0;font-weight:600;cursor:pointer}
+    .btn.alt{background:transparent;color:var(--accent);box-shadow:0 0 0 1px rgba(11,79,108,0.08);}
+
+    .card{background:var(--card);border-radius:var(--radius);padding:20px;box-shadow:0 6px 18px rgba(12,24,40,0.06)}
+
+    /* features */
+    .features{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:28px 0}
+    .feature{padding:18px;border-radius:10px;background:linear-gradient(180deg,rgba(6,100,122,0.03),transparent)}
+    .feature h3{margin:8px 0 6px}
+    .feature p{margin:0;color:var(--muted);font-size:0.95rem}
+
+    /* Mission / Vision */
+    .two-col{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin:28px 0}
+    .two-col h2{margin-top:0}
+
+    /* Instructors */
+    .instructors{display:flex;gap:14px;flex-wrap:wrap}
+    .instructor{display:flex;gap:12px;align-items:center;padding:12px;border-radius:10px;background:var(--glass)}
+    .avatar{width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,#e6f7fb,#dff3f7);display:inline-grid;place-items:center;font-weight:700;color:var(--accent-2)}
+
+    footer{margin-top:40px;padding:24px 0;color:var(--muted);font-size:0.9rem}
+
+    /* Responsive */
+    @media (max-width:900px){
+      .hero{grid-template-columns:1fr;}
+      .features{grid-template-columns:repeat(2,1fr)}
+      .two-col{grid-template-columns:1fr}
+    }
+    @media (max-width:520px){
+      .features{grid-template-columns:1fr}
+      nav a{display:none}
+      .logo{width:44px;height:44px}
+    }
+
+    /* small utilities */
+    .muted{color:var(--muted)}
+    .small{font-size:0.9rem}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="brand">
+        <div class="logo">ED</div>
+        <div>
+          <div style="font-weight:700">E‑Learning Digital School &amp; Services</div>
+          <div class="small muted">Online learning — trading, coding, marketing &amp; more</div>
+        </div>
+      </div>
+      <nav>
+        <a href="#courses">Courses</a>
+        <a href="#instructors">Instructors</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </header>
+
+    <section class="hero">
+      <div>
+        <h1>About E‑Learning Digital School &amp; Services</h1>
+        <p>We help ambitious learners master practical skills — from institutional trading and crypto to programming and digital marketing. Our bite-sized lessons, hands-on projects, and mentorship give learners the confidence to build and earn in today’s digital economy.</p>
+        <div class="card">
+          <h3 class="muted">What we offer</h3>
+          <ul class="small muted">
+            <li>Structured online courses with downloadable resources</li>
+            <li>Live mentorship and coaching sessions</li>
+            <li>Practical projects — portfolios you can show employers</li>
+            <li>Certification and continued support</li>
+          </ul>
+        </div>
+        <div style="margin-top:16px" class="cta">
+          <button class="btn">Get Started</button>
+          <button class="btn alt">View Courses</button>
+        </div>
+      </div>
+
+      <aside>
+        <div class="card" style="text-align:center">
+          <!-- Replace the SVG or image below with your hero image -->
+          <svg width="100%" height="220" viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Illustration: online learning">
+            <rect width="100%" height="100%" rx="12" fill="#f3fbff"/>
+            <g transform="translate(30,20)" fill="none" stroke="#0b4f6c">
+              <rect x="260" y="10" width="280" height="160" rx="8" fill="#fff" stroke-opacity="0.08"/>
+              <rect x="10" y="30" width="220" height="140" rx="8" fill="#e9f8fb" stroke-opacity="0.03"/>
+            </g>
+            <text x="40" y="110" fill="#06647a" font-size="18" font-weight="600">Learn — Build — Launch</text>
+          </svg>
+          <p class="muted small" style="margin-top:12px">Flexible schedules • Practical curriculum • Community support</p>
+        </div>
+      </aside>
+    </section>
+
+    <section>
+      <div class="features">
+        <div class="feature card">
+          <h3>Hands-on projects</h3>
+          <p>Every course includes practical mini-projects and a final capstone so you finish with a portfolio-ready result.</p>
+        </div>
+        <div class="feature card">
+          <h3>Industry mentors</h3>
+          <p>Learn from experienced practitioners — traders, developers, marketers — who teach real workflows used in the field.</p>
+        </div>
+        <div class="feature card">
+          <h3>Community &amp; support</h3>
+          <p>Active learner forums, weekly Q&amp;A sessions, and direct feedback to help you progress faster.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="two-col">
+      <div class="card">
+        <h2>Our Mission</h2>
+        <p class="muted">To deliver affordable, practical, and up-to-date digital skills training that empowers learners to create income streams, land better jobs, and build their own products. We focus on clarity, practice, and mentorship so learners don’t just understand concepts — they can apply them.</p>
+      </div>
+      <div class="card">
+        <h2>Our Vision</h2>
+        <p class="muted">To be the go-to learning hub for hands-on tech and trading education across Africa and beyond — a community where knowledge turns into impact, and learners become teachers.</p>
+      </div>
+    </section>
+
+    <section id="instructors">
+      <h2 style="margin-bottom:10px">Meet our instructors</h2>
+      <div class="instructors">
+        <div class="instructor card">
+          <div class="avatar">AY</div>
+          <div>
+            <div style="font-weight:700">Olatoye Ayobami</div>
+            <div class="small muted">Founder • Trading &amp; Product</div>
+          </div>
+        </div>
+
+        <div class="instructor card">
+          <div class="avatar">JS</div>
+          <div>
+            <div style="font-weight:700">Jane Smith</div>
+            <div class="small muted">Lead Developer • Web &amp; Python</div>
+          </div>
+        </div>
+
+        <div class="instructor card">
+          <div class="avatar">MK</div>
+          <div>
+            <div style="font-weight:700">Michael K.</div>
+            <div class="small muted">Marketing &amp; Growth</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section style="margin-top:28px" id="contact">
+      <div class="card">
+        <h2>Want to partner with us or bring training to your organisation?</h2>
+        <p class="muted">Email <a href="mailto:hello@elearn.example">hello@elearn.example</a> or use our contact form to discuss course licensing, group training, or corporate upskilling.</p>
+      </div>
+    </section>
+
+    <footer>
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px">
+        <div>© <strong>E‑Learning Digital School &amp; Services</strong> — All rights reserved.</div>
+        <div class="muted small">Built for learners: trading • coding • internet marketing</div>
+      </div>
+    </footer>
+  </div>
 
     
     

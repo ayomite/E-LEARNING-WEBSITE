@@ -124,6 +124,26 @@
     </form>
   </div>
     <script>
+  <script type="module">
+  // Import Firebase libraries directly from CDN
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+  import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+
+  // 🔥 Your Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyAEsygroB6IlrW5WpQw4qH5I0-xGzec2kM",
+    authDomain: "admission--portal.firebaseapp.com",
+    projectId: "admission--portal",
+    storageBucket: "admission--portal.firebasestorage.app",
+    messagingSenderId: "18148024627",
+    appId: "1:18148024627:web:8d18899bc8f5a244735e46"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  // Select form elements
   const form = document.getElementById('registrationForm');
   const fullName = document.getElementById('fullName');
   const email = document.getElementById('email');
@@ -153,6 +173,7 @@
       gender: gender.value.trim(),
     };
 
+    // 🧠 Validation
     if (!data.fullName || !data.email || !data.password || !data.confirmPassword || !data.classLevel || !data.gender) {
       errorMessage.textContent = '⚠️ Please fill in all fields.';
       return;
@@ -174,32 +195,22 @@
     }
 
     try {
-      const response = await fetch('http://localhost:5000/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
+      // ✅ Save directly to Firestore (no localhost, no backend)
+      await addDoc(collection(db, "admissions"), {
+        fullName: data.fullName,
+        email: data.email,
+        classLevel: data.classLevel,
+        gender: data.gender,
+        timestamp: new Date()
       });
 
-      const result = await response.json();
-      if (response.ok) {
-        successMessage.textContent = result.message;
-        form.reset();
-      } else {
-        errorMessage.textContent = result.error || 'Registration failed.';
-      }
+      successMessage.textContent = "✅ Registration successful!";
+      form.reset();
     } catch (err) {
-      errorMessage.textContent = '❌ Could not connect to server.';
+      console.error("Error adding document: ", err);
+      errorMessage.textContent = "❌ Could not save registration. Check console for details.";
     }
   });
-const firebaseConfig = {
-  apiKey: "AIzaSyAEsygroB6IlrW5WpQw4qH5I0-xGzec2kM",
-  authDomain: "admission--portal.firebaseapp.com",
-  projectId: "admission--portal",
-  storageBucket: "admission--portal.firebasestorage.app",
-  messagingSenderId: "18148024627",
-  appId: "1:18148024627:web:8d18899bc8f5a244735e46"
-};
 </script>
-
 </body>
 </html>

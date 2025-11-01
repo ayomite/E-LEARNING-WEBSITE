@@ -123,68 +123,83 @@
       <div class="success" id="successMessage"></div>
     </form>
   </div>
+    <script>
+  const form = document.getElementById('registrationForm');
+  const fullName = document.getElementById('fullName');
+  const email = document.getElementById('email');
+  const password = document.getElementById('password');
+  const confirmPassword = document.getElementById('confirmPassword');
+  const classSelect = document.getElementById('classSelect');
+  const gender = document.getElementById('gender');
+  const errorMessage = document.getElementById('errorMessage');
+  const successMessage = document.getElementById('successMessage');
 
-  <script>
-    // Get form and input elements
-    const form = document.getElementById('registrationForm');
-    const fullName = document.getElementById('fullName');
-    const email = document.getElementById('email');
-    const password = document.getElementById('password');
-    const confirmPassword = document.getElementById('confirmPassword');
-    const classSelect = document.getElementById('classSelect');
-    const gender = document.getElementById('gender');
-    const errorMessage = document.getElementById('errorMessage');
-    const successMessage = document.getElementById('successMessage');
+  function validateEmail(email) {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(String(email).toLowerCase());
+  }
 
-    // Function to validate email format
-    function validateEmail(email) {
-      // This regex checks for a valid email pattern
-      const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      return re.test(String(email).toLowerCase());
+  form.addEventListener('submit', async function (e) {
+    e.preventDefault();
+    errorMessage.textContent = '';
+    successMessage.textContent = '';
+
+    const data = {
+      fullName: fullName.value.trim(),
+      email: email.value.trim(),
+      password: password.value.trim(),
+      confirmPassword: confirmPassword.value.trim(),
+      classLevel: classSelect.value.trim(),
+      gender: gender.value.trim(),
+    };
+
+    if (!data.fullName || !data.email || !data.password || !data.confirmPassword || !data.classLevel || !data.gender) {
+      errorMessage.textContent = '⚠️ Please fill in all fields.';
+      return;
     }
 
-    // Handle form submission
-    form.addEventListener('submit', function(e) {
-      e.preventDefault(); // Prevent page reload
+    if (!validateEmail(data.email)) {
+      errorMessage.textContent = '⚠️ Please enter a valid email.';
+      return;
+    }
 
-      // Reset messages
-      errorMessage.textContent = '';
-      successMessage.textContent = '';
+    if (data.password.length < 6) {
+      errorMessage.textContent = '⚠️ Password must be at least 6 characters.';
+      return;
+    }
 
-      // Trim inputs to avoid spaces
-      const nameValue = fullName.value.trim();
-      const emailValue = email.value.trim();
-      const passwordValue = password.value.trim();
-      const confirmPasswordValue = confirmPassword.value.trim();
-      const classValue = classSelect.value.trim();
-      const genderValue = gender.value.trim();
+    if (data.password !== data.confirmPassword) {
+      errorMessage.textContent = '⚠️ Passwords do not match.';
+      return;
+    }
 
-      // Validate fields
-      if (!nameValue || !emailValue || !passwordValue || !confirmPasswordValue || !classValue || !genderValue) {
-        errorMessage.textContent = '⚠️ Please fill in all fields.';
-        return;
+    try {
+      const response = await fetch('http://localhost:5000/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+
+      const result = await response.json();
+      if (response.ok) {
+        successMessage.textContent = result.message;
+        form.reset();
+      } else {
+        errorMessage.textContent = result.error || 'Registration failed.';
       }
-
-      if (!validateEmail(emailValue)) {
-        errorMessage.textContent = '⚠️ Please enter a valid email address.';
-        return;
-      }
-
-      if (passwordValue.length < 6) {
-        errorMessage.textContent = '⚠️ Password must be at least 6 characters long.';
-        return;
-      }
-
-      if (passwordValue !== confirmPasswordValue) {
-        errorMessage.textContent = '⚠️ Passwords do not match.';
-        return;
-      }
-
-      // If all validations pass
-      successMessage.textContent = '✅ Registration successful!';
-      form.reset(); // Clear the form
-    });
-  </script>
+    } catch (err) {
+      errorMessage.textContent = '❌ Could not connect to server.';
+    }
+  });
+const firebaseConfig = {
+  apiKey: "AIzaSyAEsygroB6IlrW5WpQw4qH5I0-xGzec2kM",
+  authDomain: "admission--portal.firebaseapp.com",
+  projectId: "admission--portal",
+  storageBucket: "admission--portal.firebasestorage.app",
+  messagingSenderId: "18148024627",
+  appId: "1:18148024627:web:8d18899bc8f5a244735e46"
+};
+</script>
 
 </body>
 </html>

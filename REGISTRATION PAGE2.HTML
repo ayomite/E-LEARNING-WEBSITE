@@ -1,77 +1,181 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Student Signup</title>
+<meta charset="UTF-8">
+<title>Student Registration</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #eef2f7;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+  }
+
+  .container {
+    background: white;
+    padding: 40px;
+    width: 400px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  }
+
+  h2 {
+    text-align: center;
+    margin-bottom: 25px;
+    color: #333;
+  }
+
+  input, select {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+  }
+
+  button {
+    width: 100%;
+    padding: 12px;
+    background: #0066ff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+
+  button:hover {
+    background: #004fcc;
+  }
+
+  .message {
+    margin-top: 15px;
+    font-weight: bold;
+    text-align: center;
+  }
+
+  .link {
+    margin-top: 10px;
+    font-size: 14px;
+    text-align: center;
+  }
+
+  .link a {
+    color: #0066ff;
+    text-decoration: none;
+  }
+</style>
 </head>
 <body>
-  <h2>Student Signup</h2>
+
+<div class="container">
+  <h2>Student Registration</h2>
+
   <form id="signup-form">
-    <input name="username" placeholder="Username" required /><br/>
-    <input name="fullName" placeholder="Full Name" required /><br/>
-    <input name="email" type="email" placeholder="Email" required /><br/>
-    <input name="password" type="password" placeholder="Password" required minlength="6"/><br/>
-    <input name="class" placeholder="Class (e.g., JSS1)" /><br/>
-    <button type="submit">Sign Up</button>
+    <input name="username" placeholder="Username" required />
+    <input name="fullName" placeholder="Full Name" required />
+    <input name="email" type="email" placeholder="Email" required />
+    <input name="password" type="password" placeholder="Password (min 6 characters)" required minlength="6"/>
+    <input name="phone" type="text" placeholder="Phone Number" required />
+    <input name="class" placeholder="Class (e.g., JSS1)" required />
+
+    <select name="course" required>
+      <option value="" disabled selected>Select Course</option>
+      <option value="Forex Trading">Forex Trading</option>
+      <option value="Frontend Development">Frontend Development</option>
+      <option value="Backend Development">Backend Development</option>
+      <option value="Crypto Trading">Crypto Trading</option>
+    </select>
+
+    <button type="submit">Register</button>
   </form>
 
-  <script type="module">
-    // Import Firebase from CDN
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
-    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
-    import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+  <div class="message" id="msg"></div>
 
-    // Your Firebase configuration
-    const firebaseConfig = {
-      apiKey: "AIzaSyDwqKHykKby2Hl4kq9YgvuE5D-m39o8s-A",
-      authDomain: "registration-portal-a9e15.firebaseapp.com",
-      projectId: "registration-portal-a9e15",
-      storageBucket: "registration-portal-a9e15.firebasestorage.app",
-      messagingSenderId: "485069236390",
-      appId: "1:485069236390:web:65572074f90bd7570eec67"
-    };
+  <div class="link">
+    Already have an account? <a href="login.html">Login here</a>
+  </div>
+</div>
 
-    // Initialize Firebase
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+  import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+  import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
 
-    // Signup form
-    const form = document.getElementById('signup-form');
+  const firebaseConfig = {
+    apiKey: "AIzaSyDwqKHykKby2Hl4kq9YgvuE5D-m39o8s-A",
+    authDomain: "registration-portal-a9e15.firebaseapp.com",
+    projectId: "registration-portal-a9e15",
+    storageBucket: "registration-portal-a9e15.firebasestorage.app",
+    messagingSenderId: "485069236390",
+    appId: "1:485069236390:web:65572074f90bd7570eec67"
+  };
 
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
 
-      const username = form.username.value.trim();
-      const fullName = form.fullName.value.trim();
-      const email = form.email.value.trim();
-      const password = form.password.value;
-      const studentClass = form.class.value.trim();
+  const form = document.getElementById("signup-form");
+  const msg = document.getElementById("msg");
 
-      try {
-        // 1️⃣ Create user in Firebase Authentication
-        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-        const user = userCredential.user;
-        const uid = user.uid; // Firebase-generated unique ID
+  function showMessage(text, color) {
+    msg.style.color = color;
+    msg.textContent = text;
+  }
 
-        // 2️⃣ Save extra student info in Firestore
-        await setDoc(doc(db, 'students', uid), {
-          uid,
-          username,
-          fullName,
-          email,
-          studentClass,
-          createdAt: new Date().toISOString()
-        });
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
 
-        alert('Account created successfully! Redirecting to login...');
-        window.location.href = './login.html';
+    const username = form.username.value.trim();
+    const fullName = form.fullName.value.trim();
+    const email = form.email.value.trim();
+    const password = form.password.value;
+    const phone = form.phone.value.trim();
+    const studentClass = form.class.value.trim();
+    const course = form.course.value;
 
-      } catch (err) {
-        console.error(err);
-        alert('Error: ' + err.message);
+    showMessage("Creating account... please wait.", "blue");
+
+    try {
+      // 1️⃣ Create user in Firebase Auth
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+      const uid = user.uid;
+
+      // 2️⃣ Save extra info in Firestore
+      await setDoc(doc(db, "students", uid), {
+        uid,
+        username,
+        fullName,
+        email,
+        phone,
+        studentClass,
+        course,
+        createdAt: new Date().toISOString()
+      });
+
+      showMessage("🎉 Registration successful! Redirecting to login...", "green");
+
+      setTimeout(() => {
+        window.location.href = "login.html";
+      }, 2000);
+
+    } catch (err) {
+      console.error(err);
+      // Clean error messages
+      if (err.code === "auth/email-already-in-use") {
+        showMessage("⚠ This email is already registered.", "red");
+      } else if (err.code === "auth/weak-password") {
+        showMessage("⚠ Password must be at least 6 characters.", "red");
+      } else {
+        showMessage("⚠ Invalid credentials. Please try again.", "red");
       }
-    });
-  </script>
+    }
+  });
+</script>
+
 </body>
 </html>

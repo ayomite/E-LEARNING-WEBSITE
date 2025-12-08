@@ -101,81 +101,14 @@
 </div>
 
 <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
-  import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
-  import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.1/firebase-app.js";
+  import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.6.1/firebase-auth.js";
+  import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/12.6.1/firebase-firestore.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyDwqKHykKby2Hl4kq9YgvuE5D-m39o8s-A",
     authDomain: "registration-portal-a9e15.firebaseapp.com",
     projectId: "registration-portal-a9e15",
-    storageBucket: "registration-portal-a9e15.firebasestorage.app",
+    storageBucket: "registration-portal-a9e15.appspot.com",
     messagingSenderId: "485069236390",
-    appId: "1:485069236390:web:65572074f90bd7570eec67"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const db = getFirestore(app);
-
-  const form = document.getElementById("signup-form");
-  const msg = document.getElementById("msg");
-
-  function showMessage(text, color) {
-    msg.style.color = color;
-    msg.textContent = text;
-  }
-
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
-
-    const username = form.username.value.trim();
-    const fullName = form.fullName.value.trim();
-    const email = form.email.value.trim();
-    const password = form.password.value;
-    const phone = form.phone.value.trim();
-    const studentClass = form.class.value.trim();
-    const course = form.course.value;
-
-    showMessage("Creating account... please wait.", "blue");
-
-    try {
-      // 1️⃣ Create user in Firebase Auth
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      const user = userCredential.user;
-      const uid = user.uid;
-
-      // 2️⃣ Save extra info in Firestore
-      await setDoc(doc(db, "students", uid), {
-        uid,
-        username,
-        fullName,
-        email,
-        phone,
-        studentClass,
-        course,
-        createdAt: new Date().toISOString()
-      });
-
-      showMessage("🎉 Registration successful! Redirecting to login...", "green");
-
-      setTimeout(() => {
-        window.location.href = "login.html";
-      }, 2000);
-
-    } catch (err) {
-      console.error(err);
-      // Clean error messages
-      if (err.code === "auth/email-already-in-use") {
-        showMessage("⚠ This email is already registered.", "red");
-      } else if (err.code === "auth/weak-password") {
-        showMessage("⚠ Password must be at least 6 characters.", "red");
-      } else {
-        showMessage("⚠ Invalid credentials. Please try again.", "red");
-      }
-    }
-  });
-</script>
-
-</body>
-</html>
+    appId

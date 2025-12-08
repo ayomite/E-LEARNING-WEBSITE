@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Student Login</title>
+<style>
+    /* Basic Reset */
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        font-family: Arial, sans-serif;
+        background: #eef2f7;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+
+    .login-container {
+        background: #fff;
+        padding: 40px 30px;
+        border-radius: 10px;
+        box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+        width: 400px;
+        max-width: 90%;
+    }
+
+    h2 {
+        text-align: center;
+        color: #0066ff;
+        margin-bottom: 30px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 5px;
+        color: #333;
+    }
+
+    input {
+        width: 100%;
+        padding: 12px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+        outline: none;
+        font-size: 16px;
+        transition: border-color 0.3s;
+    }
+
+    input:focus {
+        border-color: #0066ff;
+    }
+
+    button {
+        width: 100%;
+        padding: 15px;
+        background: #0066ff;
+        color: #fff;
+        font-size: 18px;
+        font-weight: bold;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background 0.3s;
+    }
+
+    button:hover {
+        background: #004fcc;
+    }
+
+    .error-message {
+        color: red;
+        margin-bottom: 15px;
+        text-align: center;
+    }
+
+    .forgot-password {
+        text-align: right;
+        margin-top: -10px;
+        margin-bottom: 20px;
+    }
+
+    .forgot-password a {
+        text-decoration: none;
+        color: #0066ff;
+    }
+
+    .forgot-password a:hover {
+        text-decoration: underline;
+    }
+
+    .signup-link {
+        text-align: center;
+        margin-top: 15px;
+    }
+
+    .signup-link a {
+        text-decoration: none;
+        color: #0066ff;
+        font-weight: bold;
+    }
+
+    .signup-link a:hover {
+        text-decoration: underline;
+    }
+</style>
+</head>
+<body>
+
+<div class="login-container">
+    <h2>Student Login</h2>
+
+    <div class="error-message" id="errorMsg"></div>
+
+    <div class="form-group">
+        <label for="loginEmail">Email</label>
+        <input type="email" id="loginEmail" placeholder="Enter your email" required>
+    </div>
+
+    <div class="form-group">
+        <label for="loginPassword">Password</label>
+        <input type="password" id="loginPassword" placeholder="Enter your password" required>
+    </div>
+
+    <div class="forgot-password">
+        <a href="#">Forgot Password?</a>
+    </div>
+
+    <button id="loginBtn">Login</button>
+
+    <div class="signup-link">
+        Don't have an account? <a href="registration.html">Sign Up</a>
+    </div>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyDwqKHykKby2Hl4kq9YgvuE5D-m39o8s-A",
+        authDomain: "registration-portal-a9e15.firebaseapp.com",
+        projectId: "registration-portal-a9e15",
+        storageBucket: "registration-portal-a9e15.firebasestorage.app",
+        messagingSenderId: "485069236390",
+        appId: "1:485069236390:web:4896b47ec11962580eec67"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const loginBtn = document.getElementById("loginBtn");
+    const errorMsg = document.getElementById("errorMsg");
+
+    loginBtn.addEventListener("click", async () => {
+        const email = document.getElementById("loginEmail").value;
+        const password = document.getElementById("loginPassword").value;
+
+        errorMsg.innerText = "";
+
+        try {
+            const userCredential = await signInWithEmailAndPassword(auth, email, password);
+            const uid = userCredential.user.uid;
+
+            // Fetch student data from Firestore
+            const studentDoc = await getDoc(doc(db, "students", uid));
+            if (!studentDoc.exists()) {
+                errorMsg.innerText = "Student data not found!";
+                return;
+            }
+
+            const studentData = studentDoc.data();
+            sessionStorage.setItem("studentData", JSON.stringify(studentData));
+
+            // Redirect to student dashboard
+            window.location.href = "student-dashboard.html";
+        } catch (error) {
+            errorMsg.innerText = error.message;
+        }
+    });
+</script>
+
+</body>
+</html>

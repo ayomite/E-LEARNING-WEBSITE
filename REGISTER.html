@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>School Registration Form</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #eef2f7;
+        margin: 0;
+        padding: 0;
+    }
+
+    .container {
+        width: 90%;
+        max-width: 900px;
+        background: #fff;
+        margin: 20px auto;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    h2, h3 {
+        text-align: center;
+        color: #333;
+    }
+
+    fieldset {
+        margin-top: 25px;
+        border: 1px solid #ccc;
+        padding: 20px;
+        border-radius: 8px;
+    }
+
+    legend {
+        font-weight: bold;
+        color: #0066ff;
+        padding: 0 10px;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+
+    input, select, textarea {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        outline: none;
+    }
+
+    textarea {
+        resize: vertical;
+    }
+
+    button {
+        width: 100%;
+        padding: 15px;
+        background: #0066ff;
+        color: #fff;
+        border: none;
+        border-radius: 6px;
+        font-size: 18px;
+        cursor: pointer;
+        margin-top: 20px;
+    }
+
+    button:hover {
+        background: #004fcc;
+    }
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h2>School Registration Form</h2>
+
+    <form id="registrationForm">
+
+        <!-- Student Information -->
+        <fieldset>
+            <legend>Student Information</legend>
+
+            <div class="form-group">
+                <label>Full Name</label>
+                <input type="text" name="studentName" required>
+            </div>
+
+            <div class="form-group">
+                <label>Date of Birth</label>
+                <input type="date" name="dob" required>
+            </div>
+
+            <div class="form-group">
+                <label>Gender</label>
+                <select name="gender" required>
+                    <option value="" disabled selected>Select gender</option>
+                    <option>Male</option>
+                    <option>Female</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Level Applying For</label>
+                <input type="text" name="classApplying" placeholder="e.g. beginner, advance" required>
+            </div>
+        </fieldset>
+
+        <!-- Residence Information -->
+        <fieldset>
+            <legend>Current Residence Information</legend>
+
+            <div class="form-group">
+                <label>Home Address</label>
+                <textarea name="address" rows="3" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>City/Town</label>
+                <input type="text" name="city" required>
+            </div>
+
+            <div class="form-group">
+                <label>State</label>
+                <input type="text" name="state" required>
+            </div>
+
+            <div class="form-group">
+                <label>Phone Number</label>
+                <input type="tel" name="phone" required>
+            </div>
+        </fieldset>
+
+        <!-- Parent/Guardian Information -->
+        <fieldset>
+            <legend>Parent/Guardian Information</legend>
+
+            <div class="form-group">
+                <label>Parent/Guardian Full Name</label>
+                <input type="text" name="parentName" required>
+            </div>
+
+            <div class="form-group">
+                <label>Occupation</label>
+                <input type="text" name="occupation" required>
+            </div>
+
+            <div class="form-group">
+                <label>Parent/Guardian Phone Number</label>
+                <input type="tel" name="parentPhone" required>
+            </div>
+
+            <div class="form-group">
+                <label>Parent/Guardian Address</label>
+                <textarea name="parentAddress" rows="3" required></textarea>
+            </div>
+        </fieldset>
+
+        <!-- Choice of Course -->
+        <fieldset>
+            <legend>Choice of Course</legend>
+
+            <div class="form-group">
+                <label>Select Course</label>
+                <select name="course" required>
+                    <option value="" disabled selected>Select a course</option>
+                    <option>Science</option>
+                    <option>Commercial</option>
+                    <option>Art</option>
+                    <option>Forex Trading</option>
+                    <option>Crypto Trading</option>
+                    <option>Frontend Development</option>
+                    <option>Backend Development</option>
+                </select>
+            </div>
+        </fieldset>
+
+        <button type="submit">Submit Registration</button>
+    </form>
+</div>
+
+</body>
+</html>

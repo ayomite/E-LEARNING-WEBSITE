@@ -4,13 +4,6 @@
 <meta charset="UTF-8">
 <title>School Registration Form</title>
 <style>
-    /* Reset & Base */
-    * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-    }
-
     body {
         font-family: Arial, sans-serif;
         background: #eef2f7;
@@ -102,6 +95,15 @@
         margin-bottom: 15px;
         text-align: center;
     }
+
+    a {
+        color: #0066ff;
+        text-decoration: none;
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
 </style>
 </head>
 <body>
@@ -115,209 +117,4 @@
     <form id="registrationForm">
 
         <!-- Account Info -->
-        <fieldset>
-            <legend>Account Information</legend>
-
-            <div class="form-group">
-                <label>Username</label>
-                <input type="text" id="username" name="username" placeholder="Enter a username" required>
-            </div>
-
-            <div class="form-group">
-                <label>Email</label>
-                <input type="email" id="email" name="email" placeholder="Enter your email" required>
-            </div>
-
-            <div class="form-group">
-                <label>Password</label>
-                <input type="password" id="password" name="password" placeholder="Enter a password" required>
-            </div>
-        </fieldset>
-
-        <!-- Student Info -->
-        <fieldset>
-            <legend>Student Information</legend>
-
-            <div class="form-group">
-                <label>Full Name</label>
-                <input type="text" name="studentName" placeholder="Enter full name" required>
-            </div>
-
-            <div class="form-group">
-                <label>Date of Birth</label>
-                <input type="date" name="dob" required>
-            </div>
-
-            <div class="form-group">
-                <label>Gender</label>
-                <select name="gender" required>
-                    <option value="" disabled selected>Select gender</option>
-                    <option>Male</option>
-                    <option>Female</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label>Level Applying For</label>
-                <input type="text" name="classApplying" placeholder="e.g. Beginner, Advanced" required>
-            </div>
-        </fieldset>
-
-        <!-- Residence Info -->
-        <fieldset>
-            <legend>Current Residence Information</legend>
-
-            <div class="form-group">
-                <label>Home Address</label>
-                <textarea name="address" rows="3" placeholder="Enter home address" required></textarea>
-            </div>
-
-            <div class="form-group">
-                <label>City/Town</label>
-                <input type="text" name="city" placeholder="City/Town" required>
-            </div>
-
-            <div class="form-group">
-                <label>State</label>
-                <input type="text" name="state" placeholder="State" required>
-            </div>
-
-            <div class="form-group">
-                <label>Phone Number</label>
-                <input type="tel" name="phone" placeholder="e.g. +234..." required>
-            </div>
-        </fieldset>
-
-        <!-- Parent/Guardian Info -->
-        <fieldset>
-            <legend>Parent/Guardian Information</legend>
-
-            <div class="form-group">
-                <label>Parent/Guardian Full Name</label>
-                <input type="text" name="parentName" placeholder="Enter full name" required>
-            </div>
-
-            <div class="form-group">
-                <label>Occupation</label>
-                <input type="text" name="occupation" placeholder="Occupation" required>
-            </div>
-
-            <div class="form-group">
-                <label>Parent/Guardian Phone Number</label>
-                <input type="tel" name="parentPhone" placeholder="e.g. +234..." required>
-            </div>
-
-            <div class="form-group">
-                <label>Parent/Guardian Address</label>
-                <textarea name="parentAddress" rows="3" placeholder="Enter address" required></textarea>
-            </div>
-        </fieldset>
-
-        <!-- Choice of Course -->
-        <fieldset>
-            <legend>Choice of Course</legend>
-
-            <div class="form-group">
-                <label>Select Course</label>
-                <select name="course" required>
-                    <option value="" disabled selected>Select a course</option>
-                    <option>Science</option>
-                    <option>Commercial</option>
-                    <option>Art</option>
-                    <option>Forex Trading</option>
-                    <option>Crypto Trading</option>
-                    <option>Frontend Development</option>
-                    <option>Backend Development</option>
-                </select>
-            </div>
-        </fieldset>
-
-        <button type="submit">Submit Registration</button>
-    </form>
-</div>
-
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { getFirestore, setDoc, doc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyDwqKHykKby2Hl4kq9YgvuE5D-m39o8s-A",
-  authDomain: "registration-portal-a9e15.firebaseapp.com",
-  projectId: "registration-portal-a9e15",
-  storageBucket: "registration-portal-a9e15.firebasestorage.app",
-  messagingSenderId: "485069236390",
-  appId: "1:485069236390:web:4896b47ec11962580eec67"
-};
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
-
-const form = document.getElementById("registrationForm");
-const errorMsg = document.getElementById("errorMsg");
-const successMsg = document.getElementById("successMsg");
-
-form.addEventListener("submit", async (e) => {
-  e.preventDefault();
-  errorMsg.innerText = "";
-  successMsg.innerText = "";
-
-  try {
-    const username = document.getElementById("username").value;
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
-
-    // Student info
-    const studentName = form.studentName.value;
-    const dob = form.dob.value;
-    const gender = form.gender.value;
-    const classApplying = form.classApplying.value;
-
-    // Residence info
-    const address = form.address.value;
-    const city = form.city.value;
-    const state = form.state.value;
-    const phone = form.phone.value;
-
-    // Parent info
-    const parentName = form.parentName.value;
-    const occupation = form.occupation.value;
-    const parentPhone = form.parentPhone.value;
-    const parentAddress = form.parentAddress.value;
-
-    const course = form.course.value;
-
-    // Create user account
-    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-
-    // Save all data
-    await setDoc(doc(db, "students", userCredential.user.uid), {
-      username,
-      email,
-      studentName,
-      dob,
-      gender,
-      classApplying,
-      address,
-      city,
-      state,
-      phone,
-      parentName,
-      occupation,
-      parentPhone,
-      parentAddress,
-      course,
-      createdAt: new Date()
-    });
-
-    successMsg.innerText = "Registration successful!";
-    form.reset();
-  } catch (error) {
-    errorMsg.innerText = error.message;
-  }
-});
-</script>
-
-</body>
-</html>
+        <fieldset

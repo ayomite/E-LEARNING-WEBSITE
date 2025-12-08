@@ -4,32 +4,41 @@
 <meta charset="UTF-8">
 <title>School Registration Form</title>
 <style>
-    body {
-        font-family: Arial, sans-serif;
-        background: #eef2f7;
+    /* Reset & Base */
+    * {
+        box-sizing: border-box;
         margin: 0;
         padding: 0;
     }
 
-    .container {
-        width: 90%;
-        max-width: 900px;
-        background: #fff;
-        margin: 20px auto;
-        padding: 30px;
-        border-radius: 10px;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    body {
+        font-family: Arial, sans-serif;
+        background: #eef2f7;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
     }
 
-    h2, h3 {
+    .container {
+        background: #fff;
+        width: 90%;
+        max-width: 900px;
+        padding: 40px 30px;
+        border-radius: 10px;
+        box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+    }
+
+    h2 {
         text-align: center;
-        color: #333;
+        color: #0066ff;
+        margin-bottom: 30px;
     }
 
     fieldset {
-        margin-top: 25px;
+        margin-bottom: 25px;
         border: 1px solid #ccc;
-        padding: 20px;
+        padding: 20px 25px;
         border-radius: 8px;
     }
 
@@ -47,6 +56,7 @@
         display: block;
         font-weight: bold;
         margin-bottom: 5px;
+        color: #333;
     }
 
     input, select, textarea {
@@ -55,10 +65,12 @@
         border: 1px solid #ccc;
         border-radius: 6px;
         outline: none;
+        font-size: 16px;
+        transition: border-color 0.3s;
     }
 
-    textarea {
-        resize: vertical;
+    input:focus, select:focus, textarea:focus {
+        border-color: #0066ff;
     }
 
     button {
@@ -66,56 +78,69 @@
         padding: 15px;
         background: #0066ff;
         color: #fff;
+        font-size: 18px;
+        font-weight: bold;
         border: none;
         border-radius: 6px;
-        font-size: 18px;
         cursor: pointer;
-        margin-top: 20px;
+        margin-top: 15px;
+        transition: background 0.3s;
     }
 
     button:hover {
         background: #004fcc;
     }
+
+    .error-message {
+        color: red;
+        margin-bottom: 15px;
+        text-align: center;
+    }
+
+    .success-message {
+        color: green;
+        margin-bottom: 15px;
+        text-align: center;
+    }
 </style>
 </head>
-
 <body>
 
 <div class="container">
     <h2>School Registration Form</h2>
 
+    <div class="error-message" id="errorMsg"></div>
+    <div class="success-message" id="successMsg"></div>
+
     <form id="registrationForm">
 
-
-        <!-- NEW ACCOUNT SECTION -->
+        <!-- Account Info -->
         <fieldset>
-            <legend>Account Registration information</legend>
+            <legend>Account Information</legend>
 
             <div class="form-group">
                 <label>Username</label>
-                <input type="text" id="username" name="username" required>
+                <input type="text" id="username" name="username" placeholder="Enter a username" required>
             </div>
 
             <div class="form-group">
                 <label>Email</label>
-                <input type="email" id="email" name="email" required>
+                <input type="email" id="email" name="email" placeholder="Enter your email" required>
             </div>
 
             <div class="form-group">
                 <label>Password</label>
-                <input type="password" id="password" name="password" required>
+                <input type="password" id="password" name="password" placeholder="Enter a password" required>
             </div>
         </fieldset>
 
-
-
-        <!-- Student Information -->
+        <!-- Student Info -->
         <fieldset>
             <legend>Student Information</legend>
 
             <div class="form-group">
                 <label>Full Name</label>
-                <input type="text" name="studentName" required>
+                <input type="text" name="studentName" placeholder="Enter full name" required>
             </div>
 
             <div class="form-group">
@@ -134,57 +159,57 @@
 
             <div class="form-group">
                 <label>Level Applying For</label>
-                <input type="text" name="classApplying" placeholder="e.g. beginner, advance" required>
+                <input type="text" name="classApplying" placeholder="e.g. Beginner, Advanced" required>
             </div>
         </fieldset>
 
-        <!-- Residence Information -->
+        <!-- Residence Info -->
         <fieldset>
             <legend>Current Residence Information</legend>
 
             <div class="form-group">
                 <label>Home Address</label>
-                <textarea name="address" rows="3" required></textarea>
+                <textarea name="address" rows="3" placeholder="Enter home address" required></textarea>
             </div>
 
             <div class="form-group">
                 <label>City/Town</label>
-                <input type="text" name="city" required>
+                <input type="text" name="city" placeholder="City/Town" required>
             </div>
 
             <div class="form-group">
                 <label>State</label>
-                <input type="text" name="state" required>
+                <input type="text" name="state" placeholder="State" required>
             </div>
 
             <div class="form-group">
                 <label>Phone Number</label>
-                <input type="tel" name="phone" required>
+                <input type="tel" name="phone" placeholder="e.g. +234..." required>
             </div>
         </fieldset>
 
-        <!-- Parent/Guardian Information -->
+        <!-- Parent/Guardian Info -->
         <fieldset>
             <legend>Parent/Guardian Information</legend>
 
             <div class="form-group">
                 <label>Parent/Guardian Full Name</label>
-                <input type="text" name="parentName" required>
+                <input type="text" name="parentName" placeholder="Enter full name" required>
             </div>
 
             <div class="form-group">
                 <label>Occupation</label>
-                <input type="text" name="occupation" required>
+                <input type="text" name="occupation" placeholder="Occupation" required>
             </div>
 
             <div class="form-group">
                 <label>Parent/Guardian Phone Number</label>
-                <input type="tel" name="parentPhone" required>
+                <input type="tel" name="parentPhone" placeholder="e.g. +234..." required>
             </div>
 
             <div class="form-group">
                 <label>Parent/Guardian Address</label>
-                <textarea name="parentAddress" rows="3" required></textarea>
+                <textarea name="parentAddress" rows="3" placeholder="Enter address" required></textarea>
             </div>
         </fieldset>
 
@@ -207,50 +232,91 @@
             </div>
         </fieldset>
 
-        <!-- FIXED: Button ID -->
-        <button type="button" id="registerBtn">Submit Registration</button>
-
+        <button type="submit">Submit Registration</button>
     </form>
 </div>
 
 <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-  import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-  import { getFirestore, setDoc, doc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { getFirestore, setDoc, doc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyDwqKHykKby2Hl4kq9YgvuE5D-m39o8s-A",
-    authDomain: "registration-portal-a9e15.firebaseapp.com",
-    projectId: "registration-portal-a9e15",
-    storageBucket: "registration-portal-a9e15.firebasestorage.app",
-    messagingSenderId: "485069236390",
-    appId: "1:485069236390:web:4896b47ec11962580eec67"
-  };
+const firebaseConfig = {
+  apiKey: "AIzaSyDwqKHykKby2Hl4kq9YgvuE5D-m39o8s-A",
+  authDomain: "registration-portal-a9e15.firebaseapp.com",
+  projectId: "registration-portal-a9e15",
+  storageBucket: "registration-portal-a9e15.firebasestorage.app",
+  messagingSenderId: "485069236390",
+  appId: "1:485069236390:web:4896b47ec11962580eec67"
+};
 
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const db = getFirestore(app);
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
 
-  // Handle Registration
-  document.getElementById("registerBtn").addEventListener("click", async () => {
+const form = document.getElementById("registrationForm");
+const errorMsg = document.getElementById("errorMsg");
+const successMsg = document.getElementById("successMsg");
 
-    let username = document.getElementById("username").value;
-    let email    = document.getElementById("email").value;
-    let password = document.getElementById("password").value;
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  errorMsg.innerText = "";
+  successMsg.innerText = "";
 
-    // Create Account
+  try {
+    const username = document.getElementById("username").value;
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+
+    // Student info
+    const studentName = form.studentName.value;
+    const dob = form.dob.value;
+    const gender = form.gender.value;
+    const classApplying = form.classApplying.value;
+
+    // Residence info
+    const address = form.address.value;
+    const city = form.city.value;
+    const state = form.state.value;
+    const phone = form.phone.value;
+
+    // Parent info
+    const parentName = form.parentName.value;
+    const occupation = form.occupation.value;
+    const parentPhone = form.parentPhone.value;
+    const parentAddress = form.parentAddress.value;
+
+    const course = form.course.value;
+
+    // Create user account
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
 
-    // Save in Firestore
+    // Save all data
     await setDoc(doc(db, "students", userCredential.user.uid), {
-      username: username,
-      email: email,
+      username,
+      email,
+      studentName,
+      dob,
+      gender,
+      classApplying,
+      address,
+      city,
+      state,
+      phone,
+      parentName,
+      occupation,
+      parentPhone,
+      parentAddress,
+      course,
       createdAt: new Date()
     });
 
-    alert("Registration successful!");
-  });
+    successMsg.innerText = "Registration successful!";
+    form.reset();
+  } catch (error) {
+    errorMsg.innerText = error.message;
+  }
+});
 </script>
 
 </body>

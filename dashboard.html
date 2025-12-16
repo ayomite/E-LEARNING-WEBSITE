@@ -12,6 +12,105 @@ import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/
 const firebaseConfig = { /* same config */ };
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Student Dashboard</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f6f8;
+    padding: 40px;
+}
+
+.card {
+    background: white;
+    padding: 30px;
+    max-width: 500px;
+    margin: auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+h2 {
+    color: #0066ff;
+}
+
+.info {
+    margin: 15px 0;
+    font-size: 18px;
+}
+
+.logout {
+    margin-top: 20px;
+    background: crimson;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+    <h2>Student Dashboard</h2>
+    <div class="info" id="name"></div>
+    <div class="info" id="email"></div>
+    <div class="info" id="class"></div>
+    <button class="logout" id="logoutBtn">Logout</button>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getAuth, onAuthStateChanged, signOut } from
+"https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { getFirestore, doc, getDoc } from
+"https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+const firebaseConfig = {
+    apiKey: "AIzaSyDwqKHykKby2Hl4kq9YgvuE5D-m39o8s-A",
+    authDomain: "registration-portal-a9e15.firebaseapp.com",
+    projectId: "registration-portal-a9e15",
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+onAuthStateChanged(auth, async (user) => {
+    if (!user) {
+        window.location.href = "login.html";
+        return;
+    }
+
+    // Fetch student profile from Firestore
+    const docRef = doc(db, "students", user.uid);
+    const docSnap = await getDoc(docRef);
+
+    if (!docSnap.exists()) {
+        alert("Student profile not found.");
+        return;
+    }
+
+    const data = docSnap.data();
+    document.getElementById("name").textContent = "Name: " + data.fullName;
+    document.getElementById("email").textContent = "Email: " + data.email;
+    document.getElementById("class").textContent = "Class: " + data.class;
+});
+
+document.getElementById("logoutBtn").addEventListener("click", async () => {
+    await signOut(auth);
+    window.location.href = "login.html";
+});
+</script>
+
+</body>
+</html>
 
 onAuthStateChanged(auth, user => {
     if (!user) {

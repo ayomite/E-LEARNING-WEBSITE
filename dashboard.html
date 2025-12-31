@@ -1,93 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Student Dashboard</title>
+<style>
+body { font-family:Arial,sans-serif; background:#eef2f7; margin:0; padding:0; }
+.dashboard-container { max-width:800px; margin:50px auto; background:#fff; padding:40px; border-radius:10px; box-shadow:0 6px 20px rgba(0,0,0,0.1); }
+h1 { color:#0066ff; text-align:center; margin-bottom:30px; }
+.info-group { margin-bottom:15px; }
+.info-group label { font-weight:bold; width:150px; display:inline-block; }
+.logout-btn { display:block; width:100%; padding:15px; background:#ff4c4c; color:#fff; font-weight:bold; border:none; border-radius:6px; cursor:pointer; margin-top:30px; }
+.logout-btn:hover { background:#cc0000; }
+</style>
+</head>
+<body>
+
+<div class="dashboard-container">
+<h1>Welcome, <span id="studentName"></span></h1>
+<div class="info-group"><label>Email:</label><span id="studentEmail"></span></div>
+<div class="info-group"><label>Class:</label><span id="studentClass"></span></div>
+<div class="info-group"><label>DOB:</label><span id="studentDOB"></span></div>
+<div class="info-group"><label>Gender:</label><span id="studentGender"></span></div>
+<div class="info-group"><label>Phone:</label><span id="studentPhone"></span></div>
+<button class="logout-btn" id="logoutBtn">Logout</button>
+</div>
+
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { getFirestore, setDoc, doc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyDwqKHykKby2Hl4kq9YgvuE5D-m39o8s-A",
-  authDomain: "registration-portal-a9e15.firebaseapp.com",
-  projectId: "registration-portal-a9e15",
-  storageBucket: "registration-portal-a9e15.firebasestorage.app",
-  messagingSenderId: "485069236390",
-  appId: "1:485069236390:web:4896b47ec11962580eec67"
-};
-
+const firebaseConfig = { apiKey:"AIzaSyDwqKHykKby2Hl4kq9YgvuE5D-m39o8s-A", authDomain:"registration-portal-a9e15.firebaseapp.com", projectId:"registration-portal-a9e15" };
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-const form = document.getElementById("registrationForm");
-const errorMsg = document.getElementById("errorMsg");
-const successMsg = document.getElementById("successMsg");
+const studentName=document.getElementById("studentName");
+const studentEmail=document.getElementById("studentEmail");
+const studentClass=document.getElementById("studentClass");
+const studentDOB=document.getElementById("studentDOB");
+const studentGender=document.getElementById("studentGender");
+const studentPhone=document.getElementById("studentPhone");
+const logoutBtn=document.getElementById("logoutBtn");
 
-form.addEventListener("submit", async (e) => {
-  e.preventDefault();
-  errorMsg.innerText = "";
-  successMsg.innerText = "";
-
-  try {
-    // Account info
-    const username = document.getElementById("username").value.trim();
-    const email = document.getElementById("email").value.trim();
-    const password = document.getElementById("password").value.trim();
-
-    // Student info
-    const fullName = form.studentName.value.trim();
-    const dob = form.dob.value;
-    const gender = form.gender.value;
-    const studentClass = form.classApplying.value.trim();
-
-    // Residence info
-    const address = form.address.value.trim();
-    const city = form.city.value.trim();
-    const state = form.state.value.trim();
-    const phone = form.phone.value.trim();
-
-    // Parent info
-    const parentName = form.parentName.value.trim();
-    const occupation = form.occupation.value.trim();
-    const parentPhone = form.parentPhone.value.trim();
-    const parentAddress = form.parentAddress.value.trim();
-
-    const course = form.course.value;
-
-    // Create user account in Firebase Auth
-    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-
-    // Save full student data in Firestore
-    await setDoc(doc(db, "students", userCredential.user.uid), {
-      username,
-      email,
-      fullName,        // <-- updated field name
-      dob,
-      gender,
-      studentClass,    // <-- updated field name
-      address,
-      city,
-      state,
-      phone,
-      parentName,
-      occupation,
-      parentPhone,
-      parentAddress,
-      course,
-      createdAt: new Date()
-    });
-
-    successMsg.innerText = "Registration successful! You can now login.";
-    form.reset();
-
-    // Redirect to login page after 2 seconds
-    setTimeout(() => {
-      window.location.href = "login.html";
-    }, 2000);
-
-  } catch (error) {
-    if (error.code === "auth/email-already-in-use") {
-      errorMsg.innerHTML = 'This email is already registered. <a href="login.html">Login here</a>';
-    } else {
-      errorMsg.innerText = error.message;
-    }
-  }
+onAuthStateChanged(auth, async(user)=>{
+  if(!user){ window.location.href="login.html"; return; }
+  const docRef = doc(db,"students",user.uid);
+  const docSnap = await getDoc(docRef);
+  if(docSnap.exists()){
+    const data = docSnap.data();
+    studentName.textContent=data.fullName||"-";
+    studentEmail.textContent=data.email||"-";
+    studentClass.textContent=data.studentClass||"-";
+    studentDOB.textContent=data.dob||"-";
+    studentGender.textContent=data.gender||"-";
+    studentPhone.textContent=data.phone||"-";
+  } else { alert("No student data found."); }
 });
+
+logoutBtn.addEventListener("click", async()=>{ await signOut(auth); window.location.href="login.html"; });
 </script>
+
+</body>
+</html>

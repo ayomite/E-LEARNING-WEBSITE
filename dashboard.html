@@ -4,25 +4,26 @@
 <meta charset="UTF-8">
 <title>Student Dashboard</title>
 <style>
-body { font-family:Arial,sans-serif; background:#eef2f7; margin:0; padding:0; }
-.dashboard-container { max-width:800px; margin:50px auto; background:#fff; padding:40px; border-radius:10px; box-shadow:0 6px 20px rgba(0,0,0,0.1); }
-h1 { color:#0066ff; text-align:center; margin-bottom:30px; }
-.info-group { margin-bottom:15px; }
-.info-group label { font-weight:bold; width:150px; display:inline-block; }
-.logout-btn { display:block; width:100%; padding:15px; background:#ff4c4c; color:#fff; font-weight:bold; border:none; border-radius:6px; cursor:pointer; margin-top:30px; }
-.logout-btn:hover { background:#cc0000; }
+body { font-family: Arial, sans-serif; background: #eef2f7; margin:0; padding:0; }
+.dashboard-container { max-width: 800px; margin: 50px auto; background: #fff; padding: 40px; border-radius: 10px; box-shadow: 0 6px 20px rgba(0,0,0,0.1); }
+h1 { color: #0066ff; text-align: center; margin-bottom: 30px; }
+.info-group { margin-bottom: 15px; }
+.info-group label { font-weight: bold; width: 150px; display: inline-block; }
+.logout-btn { display: block; width: 100%; padding: 15px; background: #ff4c4c; color: #fff; font-weight: bold; border: none; border-radius: 6px; cursor: pointer; margin-top: 30px; }
+.logout-btn:hover { background: #cc0000; }
 </style>
 </head>
 <body>
 
 <div class="dashboard-container">
-<h1>Welcome, <span id="studentName"></span></h1>
-<div class="info-group"><label>Email:</label><span id="studentEmail"></span></div>
-<div class="info-group"><label>Class:</label><span id="studentClass"></span></div>
-<div class="info-group"><label>DOB:</label><span id="studentDOB"></span></div>
-<div class="info-group"><label>Gender:</label><span id="studentGender"></span></div>
-<div class="info-group"><label>Phone:</label><span id="studentPhone"></span></div>
-<button class="logout-btn" id="logoutBtn">Logout</button>
+  <h1>Welcome, <span id="studentName"></span></h1>
+  <div class="info-group"><label>Email:</label><span id="studentEmail"></span></div>
+  <div class="info-group"><label>Class:</label><span id="studentClass"></span></div>
+  <div class="info-group"><label>DOB:</label><span id="studentDOB"></span></div>
+  <div class="info-group"><label>Gender:</label><span id="studentGender"></span></div>
+  <div class="info-group"><label>Phone:</label><span id="studentPhone"></span></div>
+
+  <button class="logout-btn" id="logoutBtn">Logout</button>
 </div>
 
 <script type="module">
@@ -30,35 +31,54 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-const firebaseConfig = { apiKey:"AIzaSyDwqKHykKby2Hl4kq9YgvuE5D-m39o8s-A", authDomain:"registration-portal-a9e15.firebaseapp.com", projectId:"registration-portal-a9e15" };
+const firebaseConfig = {
+  apiKey: "AIzaSyDwqKHykKby2Hl4kq9YgvuE5D-m39o8s-A",
+  authDomain: "registration-portal-a9e15.firebaseapp.com",
+  projectId: "registration-portal-a9e15"
+};
+
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-const studentName=document.getElementById("studentName");
-const studentEmail=document.getElementById("studentEmail");
-const studentClass=document.getElementById("studentClass");
-const studentDOB=document.getElementById("studentDOB");
-const studentGender=document.getElementById("studentGender");
-const studentPhone=document.getElementById("studentPhone");
-const logoutBtn=document.getElementById("logoutBtn");
+const studentName = document.getElementById("studentName");
+const studentEmail = document.getElementById("studentEmail");
+const studentClass = document.getElementById("studentClass");
+const studentDOB = document.getElementById("studentDOB");
+const studentGender = document.getElementById("studentGender");
+const studentPhone = document.getElementById("studentPhone");
+const logoutBtn = document.getElementById("logoutBtn");
 
-onAuthStateChanged(auth, async(user)=>{
-  if(!user){ window.location.href="login.html"; return; }
-  const docRef = doc(db,"students",user.uid);
+// Check auth state
+onAuthStateChanged(auth, async (user) => {
+  if (!user) {
+    // Not logged in → redirect to login
+    window.location.href = "login.html";
+    return;
+  }
+
+  // Fetch student data from Firestore
+  const docRef = doc(db, "students", user.uid);
   const docSnap = await getDoc(docRef);
-  if(docSnap.exists()){
+
+  if (docSnap.exists()) {
     const data = docSnap.data();
-    studentName.textContent=data.fullName||"-";
-    studentEmail.textContent=data.email||"-";
-    studentClass.textContent=data.studentClass||"-";
-    studentDOB.textContent=data.dob||"-";
-    studentGender.textContent=data.gender||"-";
-    studentPhone.textContent=data.phone||"-";
-  } else { alert("No student data found."); }
+    studentName.textContent = data.fullName || "-";
+    studentEmail.textContent = data.email || "-";
+    studentClass.textContent = data.studentClass || "-";
+    studentDOB.textContent = data.dob || "-";
+    studentGender.textContent = data.gender || "-";
+    studentPhone.textContent = data.phone || "-";
+  } else {
+    alert("No student data found!");
+  }
 });
 
-logoutBtn.addEventListener("click", async()=>{ await signOut(auth); window.location.href="login.html"; });
+// Logout
+logoutBtn.addEventListener("click", async () => {
+  await signOut(auth);
+  window.location.href = "login.html";
+});
 </script>
 
 </body>

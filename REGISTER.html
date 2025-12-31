@@ -1,243 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<title>School Registration Form</title>
-<style>
-    body {
-        font-family: Arial, sans-serif;
-        background: #eef2f7;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        min-height: 100vh;
-    }
-
-    .container {
-        background: #fff;
-        width: 90%;
-        max-width: 900px;
-        padding: 40px 30px;
-        border-radius: 10px;
-        box-shadow: 0 6px 20px rgba(0,0,0,0.1);
-    }
-
-    h2 {
-        text-align: center;
-        color: #0066ff;
-        margin-bottom: 30px;
-    }
-
-    fieldset {
-        margin-bottom: 25px;
-        border: 1px solid #ccc;
-        padding: 20px 25px;
-        border-radius: 8px;
-    }
-
-    legend {
-        font-weight: bold;
-        color: #0066ff;
-        padding: 0 10px;
-    }
-
-    .form-group {
-        margin-bottom: 15px;
-    }
-
-    label {
-        display: block;
-        font-weight: bold;
-        margin-bottom: 5px;
-        color: #333;
-    }
-
-    input, select, textarea {
-        width: 100%;
-        padding: 12px;
-        border: 1px solid #ccc;
-        border-radius: 6px;
-        outline: none;
-        font-size: 16px;
-        transition: border-color 0.3s;
-    }
-
-    input:focus, select:focus, textarea:focus {
-        border-color: #0066ff;
-    }
-
-    button {
-        width: 100%;
-        padding: 15px;
-        background: #0066ff;
-        color: #fff;
-        font-size: 18px;
-        font-weight: bold;
-        border: none;
-        border-radius: 6px;
-        cursor: pointer;
-        margin-top: 15px;
-        transition: background 0.3s;
-    }
-
-    button:hover {
-        background: #004fcc;
-    }
-
-    .error-message {
-        color: red;
-        margin-bottom: 15px;
-        text-align: center;
-    }
-
-    .success-message {
-        color: green;
-        margin-bottom: 15px;
-        text-align: center;
-    }
-
-    a {
-        color: #0066ff;
-        text-decoration: none;
-    }
-
-    a:hover {
-        text-decoration: underline;
-    }
-</style>
-</head>
-<body>
-
-<div class="container">
-    <h2>School Registration Form</h2>
-
-    <div class="error-message" id="errorMsg"></div>
-    <div class="success-message" id="successMsg"></div>
-
-    <form id="registrationForm">
-
-        <!-- Account Info -->
-        <fieldset>
-            <legend>Account Information</legend>
-
-            <div class="form-group">
-                <label>Username</label>
-                <input type="text" id="username" name="username" placeholder="Enter a username" required>
-            </div>
-
-            <div class="form-group">
-                <label>Email</label>
-                <input type="email" id="email" name="email" placeholder="Enter your email" required>
-            </div>
-
-            <div class="form-group">
-                <label>Password</label>
-                <input type="password" id="password" name="password" placeholder="Enter a password" required>
-            </div>
-        </fieldset>
-
-        <!-- Student Info -->
-        <fieldset>
-            <legend>Student Information</legend>
-
-            <div class="form-group">
-                <label>Full Name</label>
-                <input type="text" name="studentName" placeholder="Enter full name" required>
-            </div>
-
-            <div class="form-group">
-                <label>Date of Birth</label>
-                <input type="date" name="dob" required>
-            </div>
-
-            <div class="form-group">
-                <label>Gender</label>
-                <select name="gender" required>
-                    <option value="" disabled selected>Select gender</option>
-                    <option>Male</option>
-                    <option>Female</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label>Level Applying For</label>
-                <input type="text" name="classApplying" placeholder="e.g. Beginner, Advanced" required>
-            </div>
-        </fieldset>
-
-        <!-- Residence Info -->
-        <fieldset>
-            <legend>Current Residence Information</legend>
-
-            <div class="form-group">
-                <label>Home Address</label>
-                <textarea name="address" rows="3" placeholder="Enter home address" required></textarea>
-            </div>
-
-            <div class="form-group">
-                <label>City/Town</label>
-                <input type="text" name="city" placeholder="City/Town" required>
-            </div>
-
-            <div class="form-group">
-                <label>State</label>
-                <input type="text" name="state" placeholder="State" required>
-            </div>
-
-            <div class="form-group">
-                <label>Phone Number</label>
-                <input type="tel" name="phone" placeholder="e.g. +234..." required>
-            </div>
-        </fieldset>
-
-        <!-- Parent/Guardian Info -->
-        <fieldset>
-            <legend>Parent/Guardian Information</legend>
-
-            <div class="form-group">
-                <label>Parent/Guardian Full Name</label>
-                <input type="text" name="parentName" placeholder="Enter full name" required>
-            </div>
-
-            <div class="form-group">
-                <label>Occupation</label>
-                <input type="text" name="occupation" placeholder="Occupation" required>
-            </div>
-
-            <div class="form-group">
-                <label>Parent/Guardian Phone Number</label>
-                <input type="tel" name="parentPhone" placeholder="e.g. +234..." required>
-            </div>
-
-            <div class="form-group">
-                <label>Parent/Guardian Address</label>
-                <textarea name="parentAddress" rows="3" placeholder="Enter address" required></textarea>
-            </div>
-        </fieldset>
-
-        <!-- Choice of Course -->
-        <fieldset>
-            <legend>Choice of Course</legend>
-
-            <div class="form-group">
-                <label>Select Course</label>
-                <select name="course" required>
-                    <option value="" disabled selected>Select a course</option>
-                    <option>Science</option>
-                    <option>Commercial</option>
-                    <option>Art</option>
-                    <option>Forex Trading</option>
-                    <option>Crypto Trading</option>
-                    <option>Frontend Development</option>
-                    <option>Backend Development</option>
-                </select>
-            </div>
-        </fieldset>
-
-        <button type="submit">Submit Registration</button>
-    </form>
-</div>
-
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
@@ -266,41 +26,42 @@ form.addEventListener("submit", async (e) => {
   successMsg.innerText = "";
 
   try {
-    const username = document.getElementById("username").value;
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
+    // Account info
+    const username = document.getElementById("username").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value.trim();
 
     // Student info
-    const studentName = form.studentName.value;
+    const fullName = form.studentName.value.trim();
     const dob = form.dob.value;
     const gender = form.gender.value;
-    const classApplying = form.classApplying.value;
+    const studentClass = form.classApplying.value.trim();
 
     // Residence info
-    const address = form.address.value;
-    const city = form.city.value;
-    const state = form.state.value;
-    const phone = form.phone.value;
+    const address = form.address.value.trim();
+    const city = form.city.value.trim();
+    const state = form.state.value.trim();
+    const phone = form.phone.value.trim();
 
     // Parent info
-    const parentName = form.parentName.value;
-    const occupation = form.occupation.value;
-    const parentPhone = form.parentPhone.value;
-    const parentAddress = form.parentAddress.value;
+    const parentName = form.parentName.value.trim();
+    const occupation = form.occupation.value.trim();
+    const parentPhone = form.parentPhone.value.trim();
+    const parentAddress = form.parentAddress.value.trim();
 
     const course = form.course.value;
 
-    // Create user account
+    // Create user account in Firebase Auth
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
 
-    // Save all data
+    // Save full student data in Firestore
     await setDoc(doc(db, "students", userCredential.user.uid), {
       username,
       email,
-      studentName,
+      fullName,        // <-- updated field name
       dob,
       gender,
-      classApplying,
+      studentClass,    // <-- updated field name
       address,
       city,
       state,
@@ -313,8 +74,13 @@ form.addEventListener("submit", async (e) => {
       createdAt: new Date()
     });
 
-    successMsg.innerText = "Registration successful!";
+    successMsg.innerText = "Registration successful! You can now login.";
     form.reset();
+
+    // Redirect to login page after 2 seconds
+    setTimeout(() => {
+      window.location.href = "login.html";
+    }, 2000);
 
   } catch (error) {
     if (error.code === "auth/email-already-in-use") {
@@ -325,6 +91,3 @@ form.addEventListener("submit", async (e) => {
   }
 });
 </script>
-
-</body>
-</html>

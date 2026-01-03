@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Courses</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .course {
+            background: #fff;
+            padding: 15px 20px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .course h3 {
+            margin: 0 0 10px;
+        }
+        .course p {
+            margin: 0 0 10px;
+        }
+        .course a {
+            display: inline-block;
+            padding: 8px 12px;
+            background: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: 0.2s;
+        }
+        .course a:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Available Courses</h1>
+    <div id="coursesList">Loading courses...</div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+
+    <script>
+        // Your Firebase config
+        const firebaseConfig = {
+            apiKey: "AIzaSyDwqKHykKby2Hl4kq9YgvuE5D-m39o8s-A",
+            authDomain: "registration-portal-a9e15.firebaseapp.com",
+            projectId: "registration-portal-a9e15",
+            storageBucket: "registration-portal-a9e15.firebasestorage.app",
+            messagingSenderId: "485069236390",
+            appId: "1:485069236390:web:4896b47ec11962580eec67"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        const coursesList = document.getElementById('coursesList');
+
+        // Fetch courses from Firestore
+        db.collection('courses').orderBy('createdAt', 'desc')
+        .onSnapshot(snapshot => {
+            coursesList.innerHTML = ''; // clear old content
+
+            if(snapshot.empty){
+                coursesList.innerHTML = '<p>No courses available yet.</p>';
+                return;
+            }
+
+            snapshot.forEach(doc => {
+                const course = doc.data();
+                coursesList.innerHTML += `
+                    <div class="course">
+                        <h3>${course.title}</h3>
+                        <p>${course.desc || ''}</p>
+                        <a href="${course.fileURL}" target="_blank">Download</a>
+                    </div>
+                `;
+            });
+        }, error => {
+            console.error('Error fetching courses:', error);
+            coursesList.innerHTML = '<p>Failed to load courses. Try again later.</p>';
+        });
+    </script>
+</body>
+</html>

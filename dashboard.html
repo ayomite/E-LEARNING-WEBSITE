@@ -6,22 +6,54 @@
 <style>
 body { font-family: Arial, sans-serif; background: #eef2f7; margin:0; padding:0; }
 .dashboard-container { max-width: 800px; margin: 50px auto; background: #fff; padding: 40px; border-radius: 10px; box-shadow: 0 6px 20px rgba(0,0,0,0.1); }
-h1 { color: #0066ff; text-align: center; margin-bottom: 30px; }
+h1 { color: #0066ff; text-align: center; margin-bottom: 20px; }
 .info-group { margin-bottom: 15px; }
 .info-group label { font-weight: bold; width: 150px; display: inline-block; }
-.logout-btn { display: block; width: 100%; padding: 15px; background: #ff4c4c; color: #fff; font-weight: bold; border: none; border-radius: 6px; cursor: pointer; margin-top: 30px; }
-.logout-btn:hover { background: #cc0000; }
+.logout-btn, .edit-btn, .save-btn, .upload-btn, #checkResultBtn { display: block; width: 100%; padding: 12px; background: #0066ff; color: #fff; font-weight: bold; border: none; border-radius: 6px; cursor: pointer; margin-top: 10px; }
+.logout-btn:hover, .edit-btn:hover, .save-btn:hover, .upload-btn:hover, #checkResultBtn:hover { background: #004fcc; }
+#editProfileForm, #resultDisplay { margin-top: 20px; }
+img { border-radius: 50%; display: block; margin-bottom: 10px; max-width: 150px; }
 </style>
 </head>
 <body>
 
 <div class="dashboard-container">
   <h1>Welcome, <span id="studentName"></span></h1>
+
+  <!-- Profile Picture -->
+  <div class="info-group">
+    <label>Profile Picture:</label>
+    <img id="profilePic" src="" alt="Profile Picture">
+    <input type="file" id="profileUpload" accept="image/*">
+    <button class="upload-btn" id="uploadPicBtn">Upload Picture</button>
+  </div>
+
+  <!-- Student Info -->
   <div class="info-group"><label>Email:</label><span id="studentEmail"></span></div>
   <div class="info-group"><label>Class:</label><span id="studentClass"></span></div>
   <div class="info-group"><label>DOB:</label><span id="studentDOB"></span></div>
   <div class="info-group"><label>Gender:</label><span id="studentGender"></span></div>
   <div class="info-group"><label>Phone:</label><span id="studentPhone"></span></div>
+  <div class="info-group"><label>Address:</label><span id="studentAddress"></span></div>
+
+  <button class="edit-btn" id="editProfileBtn">Edit Profile</button>
+
+  <!-- Edit Profile Form -->
+  <div id="editProfileForm" style="display:none;">
+    <div class="info-group"><label>Full Name</label><input type="text" id="editFullName"></div>
+    <div class="info-group"><label>Phone</label><input type="text" id="editPhone"></div>
+    <div class="info-group"><label>Address</label><textarea id="editAddress" rows="3"></textarea></div>
+    <button class="save-btn" id="saveProfileBtn">Save Changes</button>
+  </div>
+
+  <!-- Result Checker -->
+  <h2>Check Your Results</h2>
+  <div class="info-group">
+    <label>Enter PIN / UID</label>
+    <input type="text" id="resultPin">
+  </div>
+  <button id="checkResultBtn">Check Result</button>
+  <div id="resultDisplay"></div>
 
   <button class="logout-btn" id="logoutBtn">Logout</button>
 </div>
@@ -29,8 +61,10 @@ h1 { color: #0066ff; text-align: center; margin-bottom: 30px; }
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
 
+// Firebase config
 const firebaseConfig = {
   apiKey: "AIzaSyDwqKHykKby2Hl4kq9YgvuE5D-m39o8s-A",
   authDomain: "registration-portal-a9e15.firebaseapp.com",
@@ -40,27 +74,44 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
+const storage = getStorage(app);
 
+// Elements
 const studentName = document.getElementById("studentName");
 const studentEmail = document.getElementById("studentEmail");
 const studentClass = document.getElementById("studentClass");
 const studentDOB = document.getElementById("studentDOB");
 const studentGender = document.getElementById("studentGender");
 const studentPhone = document.getElementById("studentPhone");
+const studentAddress = document.getElementById("studentAddress");
+
+const profilePic = document.getElementById("profilePic");
+const profileUpload = document.getElementById("profileUpload");
+const uploadPicBtn = document.getElementById("uploadPicBtn");
+
+const editProfileBtn = document.getElementById("editProfileBtn");
+const editProfileForm = document.getElementById("editProfileForm");
+const editFullName = document.getElementById("editFullName");
+const editPhone = document.getElementById("editPhone");
+const editAddress = document.getElementById("editAddress");
+const saveProfileBtn = document.getElementById("saveProfileBtn");
+
+const resultPin = document.getElementById("resultPin");
+const checkResultBtn = document.getElementById("checkResultBtn");
+const resultDisplay = document.getElementById("resultDisplay");
+
 const logoutBtn = document.getElementById("logoutBtn");
 
-// Check auth state
+// --- Auth check ---
 onAuthStateChanged(auth, async (user) => {
   if (!user) {
-    // Not logged in → redirect to login
     window.location.href = "login.html";
     return;
   }
 
-  // Fetch student data from Firestore
+  // Fetch student data
   const docRef = doc(db, "students", user.uid);
   const docSnap = await getDoc(docRef);
-
   if (docSnap.exists()) {
     const data = docSnap.data();
     studentName.textContent = data.fullName || "-";
@@ -69,12 +120,71 @@ onAuthStateChanged(auth, async (user) => {
     studentDOB.textContent = data.dob || "-";
     studentGender.textContent = data.gender || "-";
     studentPhone.textContent = data.phone || "-";
-  } else {
-    alert("No student data found!");
+    studentAddress.textContent = data.address || "-";
+    if (data.profilePicUrl) profilePic.src = data.profilePicUrl;
   }
 });
 
-// Logout
+// --- Upload profile picture ---
+uploadPicBtn.addEventListener("click", async () => {
+  const file = profileUpload.files[0];
+  if (!file) return alert("Select a file first");
+
+  const user = auth.currentUser;
+  const storageRef = ref(storage, `profilePics/${user.uid}`);
+  await uploadBytes(storageRef, file);
+  const url = await getDownloadURL(storageRef);
+
+  await setDoc(doc(db, "students", user.uid), { profilePicUrl: url }, { merge: true });
+  profilePic.src = url;
+  alert("Profile picture updated!");
+});
+
+// --- Edit Profile ---
+editProfileBtn.addEventListener("click", () => {
+  editProfileForm.style.display = "block";
+  editFullName.value = studentName.textContent;
+  editPhone.value = studentPhone.textContent;
+  editAddress.value = studentAddress.textContent;
+});
+
+saveProfileBtn.addEventListener("click", async () => {
+  const user = auth.currentUser;
+  await setDoc(doc(db, "students", user.uid), {
+    fullName: editFullName.value,
+    phone: editPhone.value,
+    address: editAddress.value
+  }, { merge: true });
+
+  studentName.textContent = editFullName.value;
+  studentPhone.textContent = editPhone.value;
+  studentAddress.textContent = editAddress.value;
+  alert("Profile updated!");
+  editProfileForm.style.display = "none";
+});
+
+// --- Result Checker ---
+checkResultBtn.addEventListener("click", async () => {
+  const pin = resultPin.value.trim();
+  if (!pin) return alert("Enter your PIN or UID");
+
+  const docRef = doc(db, "results", pin);
+  const docSnap = await getDoc(docRef);
+
+  if (docSnap.exists()) {
+    const data = docSnap.data();
+    resultDisplay.innerHTML = `
+      <p>Student: ${data.studentName}</p>
+      <p>Class: ${data.studentClass}</p>
+      <p>Subject: ${data.subject}</p>
+      <p>Score: ${data.score}</p>
+    `;
+  } else {
+    resultDisplay.innerHTML = "<p>No results found!</p>";
+  }
+});
+
+// --- Logout ---
 logoutBtn.addEventListener("click", async () => {
   await signOut(auth);
   window.location.href = "login.html";

@@ -8,7 +8,7 @@ body { font-family: Arial, sans-serif; background: #eef2f7; margin:0; padding:0;
 .dashboard-container { max-width: 800px; margin: 50px auto; background: #fff; padding: 40px; border-radius: 10px; box-shadow: 0 6px 20px rgba(0,0,0,0.1); }
 h1 { color: #0066ff; text-align: center; margin-bottom: 20px; }
 .info-group { margin-bottom: 15px; }
-.info-group label { font-weight: bold; width: 150px; display: inline-block; }
+.info-group label { font-weight: bold; width: 150px; display: inline-block; vertical-align: top; }
 .logout-btn, .edit-btn, .save-btn, .upload-btn, #checkResultBtn { display: block; width: 100%; padding: 12px; background: #0066ff; color: #fff; font-weight: bold; border: none; border-radius: 6px; cursor: pointer; margin-top: 10px; }
 .logout-btn:hover, .edit-btn:hover, .save-btn:hover, .upload-btn:hover, #checkResultBtn:hover { background: #004fcc; }
 #editProfileForm, #resultDisplay { margin-top: 20px; }
@@ -109,19 +109,24 @@ onAuthStateChanged(auth, async (user) => {
     return;
   }
 
-  // Fetch student data
-  const docRef = doc(db, "students", user.uid);
-  const docSnap = await getDoc(docRef);
-  if (docSnap.exists()) {
-    const data = docSnap.data();
-    studentName.textContent = data.fullName || "-";
-    studentEmail.textContent = data.email || "-";
-    studentClass.textContent = data.studentClass || "-";
-    studentDOB.textContent = data.dob || "-";
-    studentGender.textContent = data.gender || "-";
-    studentPhone.textContent = data.phone || "-";
-    studentAddress.textContent = data.address || "-";
-    if (data.profilePicUrl) profilePic.src = data.profilePicUrl;
+  try {
+    // Fetch student data
+    const docRef = doc(db, "students", user.uid);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      const data = docSnap.data();
+      studentName.textContent = data.fullName || "-";
+      studentEmail.textContent = data.email || "-";
+      studentClass.textContent = data.studentClass || "-";
+      studentDOB.textContent = data.dob || "-";
+      studentGender.textContent = data.gender || "-";
+      studentPhone.textContent = data.phone || "-";
+      studentAddress.textContent = data.address || "-";
+      if (data.profilePicUrl) profilePic.src = data.profilePicUrl;
+    }
+  } catch(err) {
+    console.error("Error fetching student data:", err);
+    alert("Failed to load your profile. Check console for details.");
   }
 });
 
@@ -130,14 +135,21 @@ uploadPicBtn.addEventListener("click", async () => {
   const file = profileUpload.files[0];
   if (!file) return alert("Select a file first");
 
-  const user = auth.currentUser;
-  const storageRef = ref(storage, `profilePics/${user.uid}`);
-  await uploadBytes(storageRef, file);
-  const url = await getDownloadURL(storageRef);
+  try {
+    const user = auth.currentUser;
+    if (!user) return alert("You must be logged in first!");
 
-  await setDoc(doc(db, "students", user.uid), { profilePicUrl: url }, { merge: true });
-  profilePic.src = url;
-  alert("Profile picture updated!");
+    const storageRef = ref(storage, `profilePics/${user.uid}`);
+    const snapshot = await uploadBytes(storageRef, file);
+    const url = await getDownloadURL(snapshot.ref);
+
+    await setDoc(doc(db, "students", user.uid), { profilePicUrl: url }, { merge: true });
+    profilePic.src = url; // immediate update
+    alert("Profile picture uploaded successfully!");
+  } catch (err) {
+    console.error("Error uploading profile picture:", err);
+    alert("Failed to upload profile picture. Check console for details.");
+  }
 });
 
 // --- Edit Profile ---
@@ -149,18 +161,25 @@ editProfileBtn.addEventListener("click", () => {
 });
 
 saveProfileBtn.addEventListener("click", async () => {
-  const user = auth.currentUser;
-  await setDoc(doc(db, "students", user.uid), {
-    fullName: editFullName.value,
-    phone: editPhone.value,
-    address: editAddress.value
-  }, { merge: true });
+  try {
+    const user = auth.currentUser;
+    if (!user) return alert("You must be logged in first!");
 
-  studentName.textContent = editFullName.value;
-  studentPhone.textContent = editPhone.value;
-  studentAddress.textContent = editAddress.value;
-  alert("Profile updated!");
-  editProfileForm.style.display = "none";
+    await setDoc(doc(db, "students", user.uid), {
+      fullName: editFullName.value,
+      phone: editPhone.value,
+      address: editAddress.value
+    }, { merge: true });
+
+    studentName.textContent = editFullName.value;
+    studentPhone.textContent = editPhone.value;
+    studentAddress.textContent = editAddress.value;
+    alert("Profile updated!");
+    editProfileForm.style.display = "none";
+  } catch(err) {
+    console.error("Error updating profile:", err);
+    alert("Failed to update profile. Check console for details.");
+  }
 });
 
 // --- Result Checker ---
@@ -168,19 +187,24 @@ checkResultBtn.addEventListener("click", async () => {
   const pin = resultPin.value.trim();
   if (!pin) return alert("Enter your PIN or UID");
 
-  const docRef = doc(db, "results", pin);
-  const docSnap = await getDoc(docRef);
+  try {
+    const docRef = doc(db, "results", pin);
+    const docSnap = await getDoc(docRef);
 
-  if (docSnap.exists()) {
-    const data = docSnap.data();
-    resultDisplay.innerHTML = `
-      <p>Student: ${data.studentName}</p>
-      <p>Class: ${data.studentClass}</p>
-      <p>Subject: ${data.subject}</p>
-      <p>Score: ${data.score}</p>
-    `;
-  } else {
-    resultDisplay.innerHTML = "<p>No results found!</p>";
+    if (docSnap.exists()) {
+      const data = docSnap.data();
+      resultDisplay.innerHTML = `
+        <p>Student: ${data.studentName}</p>
+        <p>Class: ${data.studentClass}</p>
+        <p>Subject: ${data.subject}</p>
+        <p>Score: ${data.score}</p>
+      `;
+    } else {
+      resultDisplay.innerHTML = "<p>No results found!</p>";
+    }
+  } catch(err) {
+    console.error("Error fetching result:", err);
+    resultDisplay.innerHTML = "<p>Failed to fetch result. Check console for details.</p>";
   }
 });
 

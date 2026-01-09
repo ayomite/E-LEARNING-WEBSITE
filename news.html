@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Latest News</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            background-color: #f4f6f8;
+            color: #333;
+        }
+
+        .header {
+            background: #1e3c72;
+            color: #fff;
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .header h1 {
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 16px;
+        }
+
+        .news-container {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .news-card {
+            background: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .news-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .news-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .news-content {
+            padding: 20px;
+        }
+
+        .news-content h2 {
+            font-size: 20px;
+            margin-bottom: 8px;
+        }
+
+        .date {
+            font-size: 13px;
+            color: #777;
+            margin-bottom: 12px;
+        }
+
+        .news-content p {
+            font-size: 15px;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .read-more {
+            text-decoration: none;
+            background: #1e3c72;
+            color: #fff;
+            padding: 8px 14px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .read-more:hover {
+            background: #16305a;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            background: #222;
+            color: #ccc;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+
+<header class="header">
+    <h1>Latest News</h1>
+    <p>Stay updated with our recent announcements</p>
+</header>
+
+<main class="news-container">
+
+    <article class="news-card">
+        <img src="https://via.placeholder.com/400x200" alt="News Image">
+        <div class="news-content">
+            <h2>Church Revival Program 2026</h2>
+            <p class="date">January 8, 2026</p>
+            <p>
+                Deliverance For All Christian Ministry is hosting a powerful revival
+                program to ignite spiritual growth and renewal.
+            </p>
+            <a href="#" class="read-more">Read More</a>
+        </div>
+    </article>
+
+    <article class="news-card">
+        <img src="https://via.placeholder.com/400x200" alt="News Image">
+        <div class="news-content">
+            <h2>Leadership Training Workshop</h2>
+            <p class="date">January 3, 2026</p>
+            <p>
+                A special leadership training session for workers and ministers
+                across all church branches.
+            </p>
+            <a href="#" class="read-more">Read More</a>
+        </div>
+    </article>
+
+    <article class="news-card">
+        <img src="https://via.placeholder.com/400x200" alt="News Image">
+        <div class="news-content">
+            <h2>Youth Empowerment Seminar</h2>
+            <p class="date">December 28, 2025</p>
+            <p>
+                Empowering youths spiritually, mentally, and financially through
+                God-inspired teachings.
+            </p>
+            <a href="#" class="read-more">Read More</a>
+        </div>
+    </article>
+
+</main>
+
+<footer class="footer">
+    <p>&copy; 2026 Deliverance For All Christian Ministry. All Rights Reserved.</p>
+</footer>
+
+</body>
+</html>
